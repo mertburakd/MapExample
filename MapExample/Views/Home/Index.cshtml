@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+<!-- HTML sayfanızda kullanıcının konumunu almak için bir buton ekleyin -->
+<button onclick="getLocation()">Konumumu Al</button>
+
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Tarayıcınız konum bilgisini desteklemiyor.");
+        }
+    }
+
+    function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        showNearestStore(latitude, longitude);
+    }
+
+    function showNearestStore(latitude, longitude) {
+
+       var apiUrl = `/api/Store/FindNearestStore?userLatitude=${latitude}&userLongitude=${longitude}`;
+       // var apiUrl = `/api/Store/FindNearestStore?userLatitude=36.98068363016319&userLongitude=35.77096939086915`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error('Hata oluştu:', error));
+    }
+</script>
